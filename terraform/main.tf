@@ -8,7 +8,7 @@ terraform {
 }
 
 provider "google" {
-  credentials = file("peppy-web-405812-a619da06f4f1.json")
+  credentials = file("peppy-web-405812-b1fdf9e085df.json")
   project     = "peppy-web-405812"
   region      = "europe-central2-a"
 }
@@ -31,16 +31,80 @@ resource "google_compute_instance" "build_instance" {
     }
   }
 
-  metadata_startup_script = <<-EOF
-    #!/bin/bash
-    useradd -m -s /bin/bash bobzo
-    usermod -aG sudo bobzo
-    echo 'bobzo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
-    mkdir -p /home/bobzo/.ssh
-    echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC02+21UT4kT9XyzpWB9W06dGi63onnJ0+0zuGZl/acAqniZh+DEn5YOj8+a5TthedteRm2cOWz/lzm2SV6/L2g/I6XgF94fRnYnXA7ecGKZIgN1QOqGUL26mHeyL8QWzysMHKbL73313IttU6Vj4W0E90p+OA6WbzeucRKWhdanISqE4LRAGuY9NQAJj1xi3zo+zqRfvRTJvGqFwZ3fpcAcVa8OSJstdj21I33elm7DDehg2BMqgRI+rDlBUbs7rhSwWsBlHQxZRTyqS9Qg9hPKKo+fM5GjKxoliAiE5JSVTqHN6UriuCQYopYRQvycNMTWdd7HZFQ2NHsJxBkpwME62xdAwxfknnf0p0ehr1Uap6PilxEKkRKdHEcQf+2I45r470aTRrQpZ9XhMUtyeBsmY2lvsz93esaBtN8KZZaHOTu1Tfuzm9aq+0D9pJeY6+meIypQQD82S3R13R4eHrSpbOpjNvDy4Wuy0MVKfmn+sjZ3K3MyIF5WDqBHnoG5O0= bobzo@terraform" >> /home/bobzo/.ssh/authorized_keys
-    chown -R bobzo: /home/bobzo/.ssh
-    chmod 700 /home/bobzo/.ssh
-    chmod 600 /home/bobzo/.ssh/authorized_keys
-    gcloud auth configure-docker europe-central2-docker.pkg.dev -y
-  EOF
+  metadata = {
+    ssh-keys = <<EOF
+    root: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC5jlAhoTwcXJQNHZl3e0z/5jxiHdBgMk8hB9lYK0DcKAB4IEOIm7AUviYosnoG8VjkheyFWINH1MQdyYV/Mt/Zj1vxEpNpL2k5sViildscNNF9sdTraqPe76PyChUdN1ZAuoakIDzHdU5flST+QYbvYrWEplsx6bPwcnV/hLY/sKKhn+L6IYiXDnJ/NzRRNFR09kQ/J535v1MOwZ6yp0GwyYPFqofcCvNnDxGeaqo4eyvfP2DBLTMx4elAiL1ja9b8oXhrMGsxcM9MDL+b7xiX/m7DuCn8tWCVv+XImJ6QYmNFxqqaAPzy2BpQIB63DPUxN91UW/7mH61UaTk/X1ySG+dFhHGWFLnZVSeA4xNjupD+kS3utBlSVSxuoj7ImngV6JQv9Shj5hpp8WaTj866tDMfWfXLwjSy3yxwGXfyF3QmFwlx6KE+JFkaoH29gArjuZC3zyT4C/oV+wqm3R5Dmtzh6G5RafVdqDrn9576b9Qt940jOgrA6HZ8KPnKeZ8= root@test-terraform
+    jenkins: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDB4LY/pIZRp5eehRlMMISHV2szjwapbJGeyTB1ykp/BV9rC0u6QqB7xHVD+mzgPg2+9tPexEf7lCbOz6ONGwf4b8vZ1lXN0dH3ASJsjGmSpazLrOnowGig0m96Bs8hAl6ZreThU7YIgnNxaIHr6nNTCKegrtJ7fsj2+oqvYrXK4LBc/s6s08LC7FAT/JZfOD/PKtnF7ajZLpP2WAi3upKSZHbWAOpgTn6dhc33I5LBQ73lyobDVM0bPkZcFE/XzcRX4n/rfjYMFPwmkloQwh22ghqUAAl34z3Jl9hyQTrY8F9q02b28m6LNBKeacqg+m2pJMS+88vjfkxE0NW9Z8GfdTIflbDmwwiV2gVFGSV5T/yEd1Vzr8/uhTVJooybfjSUNgsgGfH4u/0aiLX+WbjhoTP8n3JsQXG5BIjsdQo7TLtPkHCtxiqpqrG0eVsX3JmFfmvvJE5Mny5O5tnjxAYSwIVeHBBrzh/hnKIRDyLXu8lget6AUrE2y4oDugfiQxs= jenkins@jenkins
+        EOF
+  }
+}
+
+resource "null_resource" "build_instance" {
+    depends_on = [ google_compute_instance.build_instance ]
+
+provisioner "remote-exec" {
+    inline = [
+      "apt update",
+      "apt install default-jdk -y",
+      "apt install docker.io -y",
+      "apt install docker-compose -y",
+      "echo {'insecure-registries': ['34.116.192.152:8123']} > /etc/docker/daemon.json"
+    ]
+
+    connection {
+      type        = "ssh"
+      user        = "root"
+      private_key = file("/root/.ssh/id_rsa")
+      host        = google_compute_instance.build_instance.network_interface[0].access_config[0].nat_ip
+     }
+   }  
+}
+
+resource "google_compute_instance" "stage_instance" {
+  name         = "stage"
+  machine_type = "n1-standard-1"
+  zone         = "europe-central2-a"
+
+  boot_disk {
+    initialize_params {
+      image = "ubuntu-os-cloud/ubuntu-2004-lts"
+      size = "25"
+      type = "pd-ssd"
+    }
+  }
+
+  network_interface {
+    network = "default"
+    access_config {
+
+    }
+  }
+
+  metadata = {
+    ssh-keys = <<EOF
+    root: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC5jlAhoTwcXJQNHZl3e0z/5jxiHdBgMk8hB9lYK0DcKAB4IEOIm7AUviYosnoG8VjkheyFWINH1MQdyYV/Mt/Zj1vxEpNpL2k5sViildscNNF9sdTraqPe76PyChUdN1ZAuoakIDzHdU5flST+QYbvYrWEplsx6bPwcnV/hLY/sKKhn+L6IYiXDnJ/NzRRNFR09kQ/J535v1MOwZ6yp0GwyYPFqofcCvNnDxGeaqo4eyvfP2DBLTMx4elAiL1ja9b8oXhrMGsxcM9MDL+b7xiX/m7DuCn8tWCVv+XImJ6QYmNFxqqaAPzy2BpQIB63DPUxN91UW/7mH61UaTk/X1ySG+dFhHGWFLnZVSeA4xNjupD+kS3utBlSVSxuoj7ImngV6JQv9Shj5hpp8WaTj866tDMfWfXLwjSy3yxwGXfyF3QmFwlx6KE+JFkaoH29gArjuZC3zyT4C/oV+wqm3R5Dmtzh6G5RafVdqDrn9576b9Qt940jOgrA6HZ8KPnKeZ8= root@test-terraform
+    jenkins: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDB4LY/pIZRp5eehRlMMISHV2szjwapbJGeyTB1ykp/BV9rC0u6QqB7xHVD+mzgPg2+9tPexEf7lCbOz6ONGwf4b8vZ1lXN0dH3ASJsjGmSpazLrOnowGig0m96Bs8hAl6ZreThU7YIgnNxaIHr6nNTCKegrtJ7fsj2+oqvYrXK4LBc/s6s08LC7FAT/JZfOD/PKtnF7ajZLpP2WAi3upKSZHbWAOpgTn6dhc33I5LBQ73lyobDVM0bPkZcFE/XzcRX4n/rfjYMFPwmkloQwh22ghqUAAl34z3Jl9hyQTrY8F9q02b28m6LNBKeacqg+m2pJMS+88vjfkxE0NW9Z8GfdTIflbDmwwiV2gVFGSV5T/yEd1Vzr8/uhTVJooybfjSUNgsgGfH4u/0aiLX+WbjhoTP8n3JsQXG5BIjsdQo7TLtPkHCtxiqpqrG0eVsX3JmFfmvvJE5Mny5O5tnjxAYSwIVeHBBrzh/hnKIRDyLXu8lget6AUrE2y4oDugfiQxs= jenkins@jenkins
+        EOF
+  }
+}
+
+resource "null_resource" "stage_instance" {
+    depends_on = [ google_compute_instance.stage_instance ]
+
+    provisioner "remote-exec" {
+    inline = [
+      "apt update",
+      "apt install default-jdk -y",
+      "apt install docker.io -y",
+      "apt install docker-compose -y",
+      "echo {'insecure-registries': ['34.116.192.152:8123']} > /etc/docker/daemon.json"
+    ]
+
+    connection {
+      type        = "ssh"
+      user        = "root"
+      private_key = file("/root/.ssh/id_rsa")
+      host        = google_compute_instance.stage_instance.network_interface[0].access_config[0].nat_ip
+     }
+   }
 }
