@@ -6,7 +6,7 @@ pipeline {
             steps {
                 sh 'sudo rm -rf /var/lib/jenkins/workspace/pipeline/certification_project/'
                 sh 'sudo git clone https://github.com/uladzimirzel/certification_project.git /var/lib/jenkins/workspace/pipeline/'
-                sh 'cd /var/lib/jenkins/workspace/pipeline/certification_project/terraform/'
+                sh 'cd /var/lib/jenkins/workspace/pipeline/terraform'
                 sh 'sudo terraform init'
             }
         }
