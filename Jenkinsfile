@@ -9,7 +9,7 @@ pipeline {
                 sh 'cd /var/lib/jenkins/workspace/pipeline/certification_project/terraform'
             }
         }
-        stage ('Terraform init') {
+        stage ('Init terraform and create instance') {
             agent {label 'master'}
             steps {
                 dir('terraform') {

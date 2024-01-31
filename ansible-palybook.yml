@@ -1,0 +1,19 @@
+---
+- name: Deploy application in Docker container
+  hosts: localhost
+  become: yes
+  tasks:
+
+    - name: Build Docker image
+      docker_image:
+        name: mywebapp
+        path: /root/dc
+        state: present
+        force: yes
+
+    - name: Run Docker container
+      docker_container:
+        name: mywebapp
+        ports:
+          - "8080:8080"
+        state: started
