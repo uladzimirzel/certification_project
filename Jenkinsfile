@@ -14,7 +14,8 @@ pipeline {
             steps {
                 dir('terraform') {
                     sh 'sudo terraform init'
-                    sh 'sudo terraform apply'
+                    sh 'sudo terraform plan -out=tfplan'
+                    sh 'sudo terraform apply tfplan'
                 }
             }
         }
