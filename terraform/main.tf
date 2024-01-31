@@ -48,9 +48,9 @@ resource "null_resource" "build_instance" {
 
 provisioner "remote-exec" {
     inline = [
-      "apt update",
+      "apt update && sleep 15",
       "apt install default-jdk -y",
-      "apt install docker.io -y && sleep 15",
+      "apt install docker.io -y",
       "curl -L \"https://github.com/docker/compose/releases/download/1.26.0/docker-compose-$(uname -s)-$(uname -m)\" -o /usr/local/bin/docker-compose",
       "chmod +x /usr/local/bin/docker-compose",
       "echo '{\"insecure-registries\":[\"34.116.192.152:8123\"]}' > /etc/docker/daemon.json",
@@ -99,9 +99,9 @@ resource "null_resource" "stage_instance" {
 
     provisioner "remote-exec" {
     inline = [
-      "apt update",
+      "apt update && sleep 15",
       "apt install default-jdk -y",
-      "apt install docker.io -y && sleep 15",
+      "apt install docker.io -y",
       "curl -L \"https://github.com/docker/compose/releases/download/1.26.0/docker-compose-$(uname -s)-$(uname -m)\" -o /usr/local/bin/docker-compose",
       "chmod +x /usr/local/bin/docker-compose",
       "echo '{\"insecure-registries\":[\"34.116.192.152:8123\"]}' > /etc/docker/daemon.json",

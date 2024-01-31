@@ -13,9 +13,9 @@ pipeline {
             agent {label 'master'}
             steps {
                 dir('terraform') {
+                    sh 'sudo terraform destroy -auto-approve'
                     sh 'sudo terraform init'
-                    sh 'sudo terraform plan -out=tfplan'
-                    sh 'sudo terraform apply tfplan'
+                    sh 'sudo terraform apply -auto-approve'
                 }
             }
         }
