@@ -13,8 +13,8 @@ pipeline {
             agent {label 'master'}
             steps {
                 dir('terraform') {
-                    sh 'terraform init'
-                    sh 'terraform apply'
+                    sh 'sudo terraform init'
+                    sh 'sudo terraform apply'
                 }
             }
         }
