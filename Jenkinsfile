@@ -5,7 +5,6 @@ pipeline {
     }
     stages {
         stage ('Git clone repository') {
-            agent {label 'master'}
             steps {
                 sh 'sudo rm -rf /var/lib/jenkins/workspace/pipeline/certification_project/'
                 sh 'sudo git clone https://github.com/uladzimirzel/certification_project.git /var/lib/jenkins/workspace/pipeline/certification_project'
@@ -13,7 +12,6 @@ pipeline {
             }
         }
         stage ('Init terraform, create instance') {
-            agent {label 'master'}
             steps {
                 dir('terraform') {
                     sh 'sudo terraform destroy -auto-approve'
