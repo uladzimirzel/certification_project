@@ -54,7 +54,9 @@ provisioner "remote-exec" {
       "apt update && apt install default-jdk -y",
       "apt install docker.io -y && apt install git -y",
       "apt install ansible -y && apt install python3-docker -y",
-      "gcloud auth configure-docker europe-central2-docker.pkg.dev -y"
+      "echo '{\"credHelpers\":{\"europe-central2-docker.pkg.dev\": \"gcloud\"}' > /root/.docker/config.json",
+      "docker login europe-central2-docker.pkg.dev/peppy-web-405812",
+      "git clone https://github.com/uladzimirzel/certification_project"
     ]
 
     connection {
@@ -101,8 +103,6 @@ resource "null_resource" "stage_instance" {
     inline = [
       "apt update && apt install default-jdk -y",
       "apt install docker.io -y",
-      "docker pull europe-central2-docker.pkg.dev/peppy-web-405812/my-docker/boxfuse-in-docker:1.0.0",
-      "docker run --name webapp -d -p 8080:8080 boxfuse-in-docker:1.0.0"
     ]
 
     connection {
