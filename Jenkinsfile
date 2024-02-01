@@ -1,8 +1,5 @@
 pipeline {
     agent any
-    environment {
-        GOOGLE_APPLICATION_CREDENTIALS = credentials('/var/lib/jenkins/peppy-web-405812-49c67ecba27f.json')
-    }
     stages {
         stage ('Git clone repository') {
             steps {
