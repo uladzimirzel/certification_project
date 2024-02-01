@@ -1,6 +1,6 @@
 ---
 - name: install maven
-  hosts: stage_instance
+  hosts: build_instance
   become: true
 
   tasks:
