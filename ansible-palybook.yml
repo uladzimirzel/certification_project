@@ -10,16 +10,3 @@
         path: /root/certification_project
         state: present
         force: yes
-    
-    - name: Log in to Google Cloud Docker registry
-      command: gcloud auth configure-docker europe-central2-docker.pkg.dev
-
-    - name: Pull Docker image
-      docker_image:
-        name: boxfuse-in-docker:1.0.0
-        source: pull
-
-    - name: Push Docker image to Google Container Registry
-      docker_image:
-        name: gcr.io/peppy-web-405812/boxfuse-in-docker:1.0.0
-        push: yes    
