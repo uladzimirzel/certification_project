@@ -1,6 +1,6 @@
 ---
 - name: install maven
-  hosts: build_instance
+  hosts: {{ BUILD_INSTANCE }}
   become: true
 
   tasks:
