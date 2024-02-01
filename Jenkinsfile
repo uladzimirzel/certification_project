@@ -3,9 +3,8 @@ pipeline {
     stages {
         stage ('Git clone repository') {
             steps {
-                sh 'sudo rm -rf /var/lib/jenkins/workspace/pipeline/certification_project/'
-                sh 'sudo git clone https://github.com/uladzimirzel/certification_project.git /var/lib/jenkins/workspace/pipeline/certification_project'
-                sh 'cd /var/lib/jenkins/workspace/pipeline/certification_project/terraform'
+                    sh 'sudo rm -rf /var/lib/jenkins/workspace/pipeline/certification_project/'
+                    sh 'sudo git clone https://github.com/uladzimirzel/certification_project.git'
             }
         }
         stage ('Init terraform, create instance') {
@@ -20,9 +19,11 @@ pipeline {
         stage ('Build and Deploy') {
             steps {
                 script {
-                    ansiblePlaybook playbook: '/var/lib/jenkins/workspace/pipeline', inventory: 'deploy.yml'
+                    dir('certification_project') {
+                        ansiblePlaybook playbook: 'deploy.yml'
                 }
             }
         }
     }
+}
 }
