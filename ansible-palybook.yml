@@ -1,0 +1,15 @@
+---
+- name: install maven
+  hosts: stage_instance
+  become: true
+
+  tasks:
+    - name: Install Maven
+      apt:
+        name: maven
+        state: present
+
+    - name: Clone Java application repository
+      git:
+        repo: https://github.com/boxfuse/boxfuse-sample-java-war-hello
+        dest: /opt/boxfuse-sample-java-war-hello
