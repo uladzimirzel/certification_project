@@ -13,8 +13,8 @@ pipeline {
         stage ('Build and Deploy') {
             steps {
                     script {
-                    def build_instance = sh(script: "terraform output -json build_node_ip | jq -r '.value'", returnStdout: true).trim()
-                    def stage_instance = sh(script: "terraform output -json app_node_ip | jq -r '.value'", returnStdout: true).trim()
+                    def build_instance = sh(script: "terraform output -json build_instance | jq -r '.value'", returnStdout: true).trim()
+                    def stage_instance = sh(script: "terraform output -json stage_instance | jq -r '.value'", returnStdout: true).trim()
                     env.BUILD_INSTANCE = build_instance
                     env.STAGE_INSTANCE = stage_instance
                     dir('/var/lib/jenkins/workspace/pipeline') {
