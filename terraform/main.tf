@@ -49,11 +49,11 @@ resource "null_resource" "build_instance" {
 provisioner "remote-exec" {
     inline = [
       "apt update && apt install default-jdk -y",
-      "apt install docker.io -y",
-      "apt install ansible -y",
-      "apt install python3-docker -y",
-      "echo '{\"insecure-registries\":[\"34.116.192.152:8123\"]}' > /etc/docker/daemon.json",
-      "systemctl restart docker"
+      "apt install docker.io -y && apt install git -y",
+      "apt install ansible -y && apt install python3-docker -y",
+      "git clone https://github.com/uladzimirzel/certification_project.git /root/certification_project",
+      "cd /root/certification_project",
+      "ansible-playbook ansible-playbook.yml"
     ]
 
     connection {
