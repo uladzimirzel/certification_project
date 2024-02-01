@@ -12,14 +12,20 @@ pipeline {
         }
         stage ('Build and Deploy') {
             steps {
-                    script {
-                    def build_instance = sh(script: "terraform output -json build_instance | jq -r '.value'", returnStdout: true).trim()
-                    def stage_instance = sh(script: "terraform output -json stage_instance | jq -r '.value'", returnStdout: true).trim()
-                    env.BUILD_INSTANCE = build_instance
-                    env.STAGE_INSTANCE = stage_instance
-                    dir('/var/lib/jenkins/workspace/pipeline') {
-                        sh 'ansible-playbook -i \"${BUILD_INSTANCE},${STAGE_INSTANCE}\" deploy.yml'
-                    }
+                script {
+                    def buildInstanceIP = sh (
+                        script: 'terraform output -json build_instance_ip',
+                        returnStdout: true
+                    ).trim()
+                    def stageInstanceIP = sh (
+                        script: 'terraform output -json stage_instance_ip',
+                        returnStdout: true
+                    ).trim()
+                       // Запускаем playbook с передачей IP-адресов
+                    ansiblePlaybook playbook: 'deploy.yml', extraVars: [
+                        build_instance_ip: buildInstanceIP,
+                        stage_instance_ip: stageInstanceIP
+                    ]
                 }
             }
         }
