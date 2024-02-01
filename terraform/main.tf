@@ -48,9 +48,7 @@ resource "null_resource" "build_instance" {
 
 provisioner "remote-exec" {
     inline = [
-      "apt update",
-      "sleep 25",
-      "apt install default-jdk -y",
+      "apt update && apt install default-jdk -y",
       "apt install docker.io -y",
       "apt install ansible -y",
       "apt install python3-docker -y",
@@ -100,9 +98,7 @@ resource "null_resource" "stage_instance" {
 
     provisioner "remote-exec" {
     inline = [
-      "apt update",
-      "sleep 25",
-      "apt install default-jdk -y",
+      "apt update && apt install default-jdk -y",
       "apt install docker.io -y",
       "echo '{\"insecure-registries\":[\"34.116.192.152:8123\"]}' > /etc/docker/daemon.json",
       "systemctl restart docker"

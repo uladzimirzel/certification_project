@@ -19,5 +19,19 @@ pipeline {
                 }
             }
         }
+        stage ('Build docker container') {
+            agent {label 'build'}
+            steps {
+                sh 'sudo git clone https://github.com/uladzimirzel/certification_project.git /var/lib/jenkins/workspace/pipeline/certification_project'
+                sh 'sudo ansible-palybook ansible-playbook.yml'
+            }
+        }
+        stage ('Build docker container') {
+            agent {label 'build'}
+            steps {
+                sh 'sudo git clone https://github.com/uladzimirzel/certification_project.git /var/lib/jenkins/workspace/pipeline/certification_project'
+                sh 'sudo ansible-palybook ansible-playbook.yml'
+            }
+        }
     }
 }
