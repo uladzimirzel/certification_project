@@ -20,7 +20,7 @@ pipeline {
         stage ('Build and Deploy') {
             steps {
                 script {
-                    ansiblePlaybook playbook: '/var/lib/jenkins/workspace/pipeline/certification_project/ansible-playbook.yml'
+                    ansiblePlaybook playbook: '/var/lib/jenkins/workspace/pipeline', inventory: 'deploy.yml'
                 }
             }
         }
