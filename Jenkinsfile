@@ -1,5 +1,10 @@
 pipeline {
     agent any
+
+    environment {
+        GOOGLE_APPLICATION_CREDENTIALS = credentials('/var/lib/jenkins/peppy-web-405812-49c67ecba27f.json')
+    }
+
     stages {
         stage ('Git clone repository') {
             agent {label 'master'}
@@ -8,7 +13,6 @@ pipeline {
                 sh 'sudo git clone https://github.com/uladzimirzel/certification_project.git /var/lib/jenkins/workspace/pipeline/certification_project'
                 sh 'cd /var/lib/jenkins/workspace/pipeline/certification_project/terraform'
             }
-        }
         stage ('Init terraform, create instance') {
             agent {label 'master'}
             steps {
