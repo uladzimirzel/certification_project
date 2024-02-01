@@ -18,10 +18,9 @@ pipeline {
         }
         stage ('Build and Deploy') {
             steps {
-                dir('certification_project') {
-                    script {
-                        ansiblePlaybook playbook: 'ansible-playbook.yml'
-                    }
+                script {
+                    sh 'cd /var/lib/jenkins/workspace/pipeline/certification_project/'
+                    ansiblePlaybook playbook: 'ansible-playbook.yml'
                 }
             }
         }
