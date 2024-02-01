@@ -56,6 +56,7 @@ provisioner "remote-exec" {
       "apt install ansible -y && apt install python3-docker -y",
       "echo '{\"credHelpers\":{\"europe-central2-docker.pkg.dev\": \"gcloud\"}' > /root/.docker/config.json",
       "docker login europe-central2-docker.pkg.dev/peppy-web-405812",
+      "docker pull europe-central2-docker.pkg.dev/peppy-web-405812/my-docker/boxfuse-in-docker:1.0.1",
       "git clone https://github.com/uladzimirzel/certification_project"
     ]
 
