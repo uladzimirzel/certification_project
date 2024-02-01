@@ -6,14 +6,15 @@
 
     - name: Build Docker image
       docker_image:
-        name: mywebapp
+        name: boxfuse-in-docker:1.0.0
         path: /root/dc
         state: present
         force: yes
 
     - name: Run Docker container
       docker_container:
-        name: mywebapp
+        name: mywebapp-test
+        image: boxfuse-in-docker:1.0.0
         ports:
           - "8080:8080"
         state: started
