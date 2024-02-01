@@ -33,6 +33,11 @@ resource "google_compute_instance" "build_instance" {
     }
   }
 
+  service_account {
+    email = "jenkins@peppy-web-405812.iam.gserviceaccount.com"
+    scopes = ["compute-ro", "storage-ro"]
+  }
+
   metadata = {
     ssh-keys = <<EOF
     root: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDfPznW66aLU39FXRzzAZQsZeCv0Fni3CY/LAijT7gbzieTPZBk+TOuLhNsU34Sv/6AfmDeSTzIxNGlyoGh6rELz2AOkNxTCZq3raTyzbt1i6085i3grx8lUVScWyjai+wHW/b0cLYEypAihNi16K73yOGmQPKxKWjEZ7CDlo4TkgXkjvkC9KWjQPSEboaupP/DO9yO9ZJ+SQGQmzoKFrMb7+B15LQ8d8E2H0H1t7XpM8lo6h6Npfboe/VSg5lHMC4jP9C3uRdRGEL1BO3NhB8bGDKFKHUGpKukrAasZpmZWQGzttu432E+KY1B3LUr2BNLGpe5QWaIejpE9hsw0emN5trY66TnNY6cvi0gJnA8yc7Mi5Pmjei0/u0br98dUSINsk1fmB3c1wa91TzGAnIZLr+UQF0FgzulbblSJ7jv4Tjoz91S2LR98Iof0a0/843RaPxJL7n2mppOojCRJnHeOsrZ+hId9M+/mgs3vgUMNAB6xRtHBZas9fO8aup1QI0= root@jenkins
@@ -40,8 +45,6 @@ resource "google_compute_instance" "build_instance" {
         EOF
   }
 }
-
-
 
 resource "null_resource" "build_instance" {
     depends_on = [ google_compute_instance.build_instance ]
@@ -51,12 +54,7 @@ provisioner "remote-exec" {
       "apt update && apt install default-jdk -y",
       "apt install docker.io -y && apt install git -y",
       "apt install ansible -y && apt install python3-docker -y",
-      "git clone https://github.com/uladzimirzel/certification_project.git",
-      "cd /root/certification_project",
-      "ansible-playbook ansible-playbook.yml",
-      "docker login europe-central2-docker.pkg.dev/peppy-web-405812",
-      "docker tag boxfuse-in-docker:1.0.0 europe-central2-docker.pkg.dev/peppy-web-405812/my-docker/boxfuse-in-docker:1.0.0",
-      "docker push europe-central2-docker.pkg.dev/peppy-web-405812/my-docker/boxfuse-in-docker:1.0.0"
+      "gcloud auth configure-docker europe-central2-docker.pkg.dev -y"
     ]
 
     connection {
