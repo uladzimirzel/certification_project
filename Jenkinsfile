@@ -11,6 +11,7 @@ pipeline {
         stage ('Init terraform, create instance') {
             steps {
                 dir('terraform') {
+                    sh 'sudo terraform destroy -auto-approve'
                     sh 'sudo terraform init'
                     sh 'sudo terraform apply -auto-approve'
                 }
@@ -19,8 +20,7 @@ pipeline {
         stage ('Build and Deploy') {
             steps {
                 script {
-                    sh 'cd /var/lib/jenkins/workspace/pipeline/certification_project/'
-                    ansiblePlaybook playbook: 'ansible-playbook.yml'
+                    ansiblePlaybook playbook: '/var/lib/jenkins/workspace/pipeline/certification_project/ansible-playbook.yml'
                 }
             }
         }
