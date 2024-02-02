@@ -4,10 +4,15 @@
   become: yes
   tasks:
 
+    - name: git clone repository
+      git:
+        repo: https://github.com/uladzimirzel/certification_project
+        dest: /opt/app
+
     - name: Build Docker image
       docker_image:
         name: mywebapp
-        path: .
+        path: /opt/app
         state: present
         force: yes
 
