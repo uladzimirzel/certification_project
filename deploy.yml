@@ -40,3 +40,6 @@
         group: tomcat
         mode: "0644"
       notify: Restart Tomcat
+    
+    - name: Build Docker image
+        command: "docker build -t {{ app_name }}:1.0.0 ."
