@@ -14,7 +14,7 @@ pipeline {
             steps {
                 script {
                     ansiblePlaybook(
-                        credentialsId: 'jenkins',
+                        credentialsId: 'google_key',
                         playbook: '/var/lib/jenkins/workspace/pipeline/deploy.yml',
                         inventory: '/var/lib/jenkins/workspace/pipeline/inventory.ini'
                     )
