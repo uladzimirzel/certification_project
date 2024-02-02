@@ -1,32 +1,19 @@
 pipeline {
     agent any
     stages {
-        stage ('Init terraform, create instance') {
+        stage('Deploy') {
             steps {
-                dir('terraform') {
-                    sh 'sudo terraform destroy -auto-approve'
-                    sh 'sudo terraform init'
-                    sh 'sudo terraform apply -auto-approve'
+                withCredentials([googleComputeCredentials(credentialsId: 'jenkins', project: 'peppy-web-405812')]) {
+
                 }
             }
         }
-        stage ('Build and Deploy') {
+        stage('Deploy with Ansible') {
             steps {
-                script {
-                    def buildInstanceIP = sh (
-                        script: 'terraform output -json build_instance_ip',
-                        returnStdout: true
-                    ).trim()
-                    def stageInstanceIP = sh (
-                        script: 'terraform output -json stage_instance_ip',
-                        returnStdout: true
-                    ).trim()
-                       // Запускаем playbook с передачей IP-адресов
-                    ansiblePlaybook playbook: 'deploy.yml', extraVars: [
-                        build_instance_ip: buildInstanceIP,
-                        stage_instance_ip: stageInstanceIP
-                    ]
-                }
+                ansiblePlaybook(
+                    playbook: '/var/lib/jenkins/workspace/pipeline/deploy.yml',
+                    inventory: '/var/lib/jenkins/workspace/pipeline/inventory.ini'
+                )
             }
         }
     }

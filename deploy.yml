@@ -1,15 +1,6 @@
 ---
-- name: install maven
-  hosts: {{ BUILD_INSTANCE }}
-  become: true
-
+- name: Example Ansible Playbook
+  hosts: all
   tasks:
-    - name: Install Maven
-      apt:
-        name: maven
-        state: present
-
-    - name: Clone Java application repository
-      git:
-        repo: https://github.com/boxfuse/boxfuse-sample-java-war-hello
-        dest: /opt/boxfuse-sample-java-war-hello
+    - name: Execute command on remote host
+      command: touch BOBZO.txt
