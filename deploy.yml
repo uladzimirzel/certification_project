@@ -14,13 +14,6 @@
         repo: https://github.com/uladzimirzel/certification_project
         dest: /usr/app
 
-    - name: Установка Python 3 и Docker
-      apt:
-        name: 
-          - docker.io
-          - python3-docker
-        state: present
-
     - name: gcloud
       command: sudo yes | gcloud auth configure-docker europe-central2-docker.pkg.dev
 
