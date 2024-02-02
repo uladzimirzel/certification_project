@@ -53,7 +53,8 @@ provisioner "remote-exec" {
     inline = [
       "apt update && apt install docker.io -y",
       "apt install git -y",
-      "apt install ansible -y && apt install python3-docker -y",
+      "apt install ansible -y",
+      "apt install python3-docker -y",
       "yes | gcloud auth configure-docker europe-central2-docker.pkg.dev",
       "docker login https://europe-central2-docker.pkg.dev/peppy-web-405812/my-docker"
     ]
@@ -107,7 +108,8 @@ resource "null_resource" "stage_instance" {
     inline = [
       "apt update && apt install docker.io -y",
       "apt install git -y",
-      "apt install ansible -y && apt install python3-docker -y",
+      "apt install ansible -y",
+      "apt install python3-docker -y",
       "yes | gcloud auth configure-docker europe-central2-docker.pkg.dev",
       "docker login https://europe-central2-docker.pkg.dev/peppy-web-405812/my-docker"
 
