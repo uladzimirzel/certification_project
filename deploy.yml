@@ -13,3 +13,17 @@
       git:
         repo: https://github.com/uladzimirzel/certification_project
         dest: /usr/app
+
+    - name: Build Docker image
+      docker_image:
+        name: mywebapp
+        path: /usr/app
+        state: present
+        force: yes
+
+    - name: Run Docker container
+      docker_container:
+        name: mywebapp
+        ports:
+          - "8080:8080"
+        state: started
