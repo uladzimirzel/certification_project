@@ -1,38 +1,42 @@
 ---
-- name: serv-build
+- name: Deploy Java web application with Tomcat using Ansible
   hosts: build
   become: yes
-
+  vars:
+    app_name: "hello"
+    tomcat_version: "9"
+    maven_version: "3.6.3"
+    tomcat_service_name: "tomcat{{ tomcat_version }}"
   tasks:
-    - name: install packages
+    - name: Install Maven
       apt:
-        name:
-          - git
-          - maven
-          - openjdk-11-jdk
+        name: "maven"
         state: present
+        update_cache: yes
 
-    - name: git clone repository
+    - name: Clone git repository
       git:
-        repo: https://github.com/boxfuse/boxfuse-sample-java-war-hello.git
-        dest: /usr/app/boxfuse-sample-java-war-hello
+        repo: "https://github.com/boxfuse/boxfuse-sample-java-war-hello.git"
+        dest: "/opt/{{ app_name }}"
 
-    - name: build-war
-      shell:
-        chdir: /usr/app/boxfuse-sample-java-war-hello
-        cmd: mvn package
-        
-- name: serv-prod
-  hosts: stage
-  become: yes
+    - name: Build the Java application
+      command: "mvn package"
+      args:
+        chdir: "/opt/{{ app_name }}"
 
-  tasks:
-    - name: install-tomcat
+    - name: Install Tomcat
       apt:
-        name: tomcat9
+        name: "tomcat{{ tomcat_version }}"
         state: present
-    - name:
+        update_cache: yes
+
+    - name: Move WAR file to Tomcat webapps directory
+      become: yes
+      become_user: tomcat
       copy:
-        src: "/usr/app/boxfuse-sample-java-war-hello/target/hello-1.0.war"
-        dest: "/var/lib/tomcat/webapps"
-...
+        src: "/opt/{{ app_name }}/target/{{ app_name }}.war"
+        dest: "/var/lib/{{ tomcat_service_name }}/webapps/{{ app_name }}.war"
+        owner: tomcat
+        group: tomcat
+        mode: "0644"
+      notify: Restart Tomcat
