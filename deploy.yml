@@ -19,11 +19,3 @@
         name: mywebapp
         path: /usr/app
         state: present
-        force: yes
-
-    - name: Run Docker container
-      docker_container:
-        name: mywebapp
-        ports:
-          - "8080:8080"
-        state: started
