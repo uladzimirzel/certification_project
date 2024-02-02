@@ -1,19 +1,13 @@
 pipeline {
     agent any
     stages {
-        stage('Deploy') {
+        stage('Connect to Target Host') {
             steps {
-                withCredentials([googleComputeCredentials(credentialsId: 'jenkins', project: 'peppy-web-405812')]) {
-
+                script {
+                    sshagent(credentials: ['jenkins']) {
+                        sh 'ssh jenkins@34.116.237.21 mkdir /opt/TEST'
+                    }
                 }
-            }
-        }
-        stage('Deploy with Ansible') {
-            steps {
-                ansiblePlaybook(
-                    playbook: '/var/lib/jenkins/workspace/pipeline/deploy.yml',
-                    inventory: '/var/lib/jenkins/workspace/pipeline/inventory.ini'
-                )
             }
         }
     }
