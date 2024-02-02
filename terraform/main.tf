@@ -102,7 +102,7 @@ resource "null_resource" "stage_instance" {
 
     provisioner "remote-exec" {
     inline = [
-
+      "sudo apt update"
     ]
 
     connection {
