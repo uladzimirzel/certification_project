@@ -3,10 +3,10 @@ pipeline {
     stages {
         stage('terr') {
             steps {
-                dir('terraform')
-                sh 'terraform destroy -auto-approve'
-                sh 'terraform init'
-                sh 'terraform apply -auto-approve'
+                dir('terraform') {
+                    sh 'terraform destroy -auto-approve'
+                    sh 'terraform init'
+                    sh 'terraform apply -auto-approve'
             }
         }
         stage('Deploy with Ansible') {
@@ -20,5 +20,6 @@ pipeline {
                 }
             }
         }
+    }
     }
 }
