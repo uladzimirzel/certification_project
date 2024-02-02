@@ -1,45 +1,19 @@
 ---
-- name: Deploy Java web application with Tomcat using Ansible
-  hosts: build
+- name: Deploy application in Docker container
+  hosts: localhost
   become: yes
-  vars:
-    app_name: "boxfuse-sample-java-war-hello"
-    tomcat_version: "9"
-    maven_version: "3.6.3"
-    tomcat_service_name: "tomcat{{ tomcat_version }}"
   tasks:
-    - name: Install Maven
-      apt:
-        name: "maven"
-        state: present
-        update_cache: yes
 
-    - name: Clone git repository
-      git:
-        repo: "https://github.com/boxfuse/boxfuse-sample-java-war-hello.git"
-        dest: "/opt/{{ app_name }}"
-
-    - name: Build the Java application
-      command: "mvn package"
-      args:
-        chdir: "/opt/{{ app_name }}"
-
-    - name: Install Tomcat
-      apt:
-        name: "tomcat{{ tomcat_version }}"
-        state: present
-        update_cache: yes
-
-    - name: Move WAR file to Tomcat webapps directory
-      become: yes
-      become_user: tomcat
-      copy:
-        src: "/opt/{{ app_name }}/target/hello-1.0.war"
-        dest: "/var/lib/tomcat/webapps"
-        owner: tomcat
-        group: tomcat
-        mode: "0644"
-      notify: Restart Tomcat
-    
     - name: Build Docker image
-      command: "docker build -t {{ app_name }}:1.0.0 ."
+      docker_image:
+        name: mywebapp
+        path: .
+        state: present
+        force: yes
+
+    - name: Run Docker container
+      docker_container:
+        name: mywebapp
+        ports:
+          - "8080:8080"
+        state: started
