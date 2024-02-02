@@ -52,7 +52,9 @@ resource "null_resource" "build_instance" {
 provisioner "remote-exec" {
     inline = [
       "apt-get update",
-      "apt-get install docker.io -y && apt-get install python3-docker -y"
+      "apt-get install docker.io -y && apt-get install python3-docker -y",
+      "sudo yes | gcloud auth configure-docker europe-central2-docker.pkg.dev",
+      "sudo docker login https://europe-central2-docker.pkg.dev/peppy-web-405812/my-docker"
     ]
 
     connection {
@@ -103,7 +105,9 @@ resource "null_resource" "stage_instance" {
     provisioner "remote-exec" {
     inline = [
       "apt-get update",
-      "apt-get install docker.io -y"
+      "apt-get install docker.io -y",
+      "sudo yes | gcloud auth configure-docker europe-central2-docker.pkg.dev",
+      "sudo docker login https://europe-central2-docker.pkg.dev/peppy-web-405812/my-docker"
     ]
 
     connection {
