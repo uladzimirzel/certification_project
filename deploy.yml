@@ -22,8 +22,8 @@
 
     - name: Tag Docker image
       docker_image:
-        name: boxfuse
-        tag: europe-central2-docker.pkg.dev/peppy-web-405812/my-docker/boxfuse:1.0.0
+        name: europe-central2-docker.pkg.dev/peppy-web-405812/my-docker/boxfuse:1.0.0
+        tag: boxfuse:1.0.0
         source: local
         force_tag: yes
 
