@@ -7,18 +7,3 @@
     - name: git clone repository
       git:
         repo: https://github.com/uladzimirzel/certification_project
-        dest: /home/jenkins/
-
-    - name: Build Docker image
-      docker_image:
-        name: mywebapp
-        path: /home/jenkins/certification_project
-        state: present
-        force: yes
-
-    - name: Run Docker container
-      docker_container:
-        name: mywebapp
-        ports:
-          - "8080:8080"
-        state: started
