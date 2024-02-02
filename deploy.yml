@@ -3,7 +3,7 @@
   hosts: build
   become: yes
   vars:
-    app_name: "hello"
+    app_name: "boxfuse-sample-java-war-hello"
     tomcat_version: "9"
     maven_version: "3.6.3"
     tomcat_service_name: "tomcat{{ tomcat_version }}"
@@ -34,8 +34,8 @@
       become: yes
       become_user: tomcat
       copy:
-        src: "/opt/{{ app_name }}/target/{{ app_name }}.war"
-        dest: "/var/lib/{{ tomcat_service_name }}/webapps/{{ app_name }}.war"
+        src: "/opt/{{ app_name }}/target/hello-1.0.war"
+        dest: "/var/lib/tomcat/webapps"
         owner: tomcat
         group: tomcat
         mode: "0644"
