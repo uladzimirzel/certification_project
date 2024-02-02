@@ -29,5 +29,5 @@
 
     - name: Push Docker image
       docker_image:
-        name: europe-central2-docker.pkg.dev/peppy-web-405812/my-docker/boxfuse:1.0.0
+        name: europe-central2-docker.pkg.dev/peppy-web-405812/my-docker
         push: yes
