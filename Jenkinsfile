@@ -15,7 +15,7 @@ pipeline {
                     sh 'ssh-keygen -f "/var/lib/jenkins/.ssh/known_hosts" -R "34.116.237.21"'
                     sh 'ssh-keygen -f "/var/lib/jenkins/.ssh/known_hosts" -R "34.118.105.40"'
                     ansiblePlaybook(
-                        credentialsId: 'jenkins',
+                        credentialsId: 'root',
                         playbook: '/var/lib/jenkins/workspace/pipeline/deploy.yml',
                         inventory: '/var/lib/jenkins/workspace/pipeline/inventory.ini'
                     )
