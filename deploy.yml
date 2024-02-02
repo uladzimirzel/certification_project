@@ -1,6 +1,38 @@
 ---
-- name: Example Ansible Playbook
-  hosts: all
+- name: serv-build
+  hosts: build
+  become: yes
+
   tasks:
-    - name: Execute command on remote host
-      command: touch BOBZO.txt
+    - name: install packages
+      apt:
+        name:
+          - git
+          - maven
+          - openjdk-11-jdk
+        state: present
+
+    - name: git clone repository
+      git:
+        repo: https://github.com/boxfuse/boxfuse-sample-java-war-hello.git
+        dest: /usr/app/boxfuse-sample-java-war-hello
+
+    - name: build-war
+      shell:
+        chdir: /usr/app/boxfuse-sample-java-war-hello
+        cmd: mvn package
+        
+- name: serv-prod
+  hosts: stage
+  become: yes
+
+  tasks:
+    - name: install-tomcat
+      apt:
+        name: tomcat9
+        state: present
+    - name:
+      copy:
+        src: "/usr/app/boxfuse-sample-java-war-hello/target/hello-1.0.war"
+        dest: "/var/lib/tomcat/webapps"
+...
