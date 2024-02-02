@@ -4,7 +4,6 @@ pipeline {
         stage('Create instance') {
             steps {
                 dir('terraform') {
-                    sh 'sudo terraform destroy -auto-approve'
                     sh 'sudo terraform init'
                     sh 'sudo terraform apply -auto-approve'
                 }
