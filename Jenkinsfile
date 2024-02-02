@@ -1,8 +1,7 @@
 pipeline {
     agent any
     stages {
-        stage('Connect to Target Host') {
-            stage('Deploy with Ansible') {
+        stage('Deploy with Ansible') {
             steps {
                 script {
                     ansiblePlaybook(
@@ -14,5 +13,4 @@ pipeline {
             }
         }
     }
-}
 }
