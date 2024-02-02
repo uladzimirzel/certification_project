@@ -14,12 +14,6 @@
         repo: https://github.com/uladzimirzel/certification_project
         dest: /usr/app
 
-    - name: gcloud
-      command: sudo yes | gcloud auth configure-docker europe-central2-docker.pkg.dev
-
-    - name:
-      command: sudo docker login https://europe-central2-docker.pkg.dev/peppy-web-405812/my-docker  
-
     - name: Build Docker image
       docker_image:
         name: boxfuse:1.0.0
