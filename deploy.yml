@@ -4,7 +4,12 @@
   become: yes
   tasks:
 
-    - name: git clone repository
+    - name: Create project directory
+      file:
+        path: /usr/app
+        state: directory
+
+    - name: Clone Git repository
       git:
         repo: https://github.com/uladzimirzel/certification_project
-        dest: /
+        dest: /usr/app
