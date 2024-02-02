@@ -12,13 +12,16 @@
     - name: Build Docker image
       docker_image:
         name: mywebapp
-        path: /opt/app
+        build:
+          path: /opt/app
+          source: build
         state: present
-        force: yes
+        force_tag: yes
 
     - name: Run Docker container
       docker_container:
         name: mywebapp
+        image: mywebapp
         ports:
           - "8080:8080"
         state: started
