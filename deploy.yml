@@ -1,6 +1,6 @@
 ---
 - name: Deploy application in Docker container
-  hosts: localhost
+  hosts: build
   become: yes
   tasks:
 
