@@ -16,6 +16,17 @@
 
     - name: Build Docker image
       docker_image:
-        name: mywebapp
+        name: boxfuse:1.0.0
         path: /usr/app
         state: present
+
+    - name: Tag Docker image
+      docker_image:
+        name: boxfuse:1.0.0
+        tag: "europe-central2-docker.pkg.dev/peppy-web-405812/my-docker/boxfuse:1.0.0"
+        source: local
+
+    - name: Push Docker image
+      docker_image:
+        name: "europe-central2-docker.pkg.dev/peppy-web-405812/my-docker/boxfuse:1.0.0"
+        push: yes
