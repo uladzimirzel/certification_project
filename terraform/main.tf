@@ -52,11 +52,17 @@ resource "null_resource" "build_instance" {
 provisioner "remote-exec" {
     inline = [
       "sudo apt update",
+      "sleep 20",
       "sudo apt install docker.io -y",
+      "sleep 20",
       "sudo apt install git -y",
+      "sleep 20",
       "sudo apt install ansible -y",
+      "sleep 20",
       "sudo apt install python3-docker -y",
+      "sleep 20",
       "sudo yes | gcloud auth configure-docker europe-central2-docker.pkg.dev",
+      "sleep 20",
       "sudo docker login https://europe-central2-docker.pkg.dev/peppy-web-405812/my-docker"
     ]
 
@@ -108,8 +114,11 @@ resource "null_resource" "stage_instance" {
     provisioner "remote-exec" {
     inline = [
       "sudo apt update",
+      "sleep 20",
       "sudo apt install docker.io -y",
+      "sleep 20",
       "sudo yes | gcloud auth configure-docker europe-central2-docker.pkg.dev",
+      "sleep 20",
       "sudo docker login https://europe-central2-docker.pkg.dev/peppy-web-405812/my-docker"
     ]
 
