@@ -14,14 +14,11 @@
         repo: https://github.com/uladzimirzel/certification_project
         dest: /usr/app
 
-    - name: Установка Git
-      apt:
-        name: git
-        state: present
-
     - name: Установка Python 3 и Docker
       apt:
-        name: python3-docker
+        name: 
+          - docker.io
+          - python3-docker
         state: present
 
     - name: Build Docker image

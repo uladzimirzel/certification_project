@@ -52,7 +52,6 @@ resource "null_resource" "build_instance" {
 provisioner "remote-exec" {
     inline = [
       "sudo apt update",
-      "sudo apt install docker.io -y",
       "sudo apt install ansible -y",
       "sudo yes | gcloud auth configure-docker europe-central2-docker.pkg.dev",
       "sudo docker login https://europe-central2-docker.pkg.dev/peppy-web-405812/my-docker"
