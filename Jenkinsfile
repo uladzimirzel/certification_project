@@ -1,9 +1,5 @@
 pipeline {
     agent any
-    environment {
-        DOCKER_USERNAME = "${credentials('docker-token').username}"
-        DOCKER_PASSWORD = "${credentials('docker-token').password}"
-    }
     stages {
         stage('Create instance') {
             steps {
@@ -17,12 +13,14 @@ pipeline {
         stage('Deploy with Ansible') {
             steps {
                     script {
-                    ansiblePlaybook(
+                        withCredentials([usernamePassword(credentialsId: 'docker-token', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
+                            ansiblePlaybook(
                         credentialsId: 'jenkins',
                         playbook: '/var/lib/jenkins/workspace/pipeline/deploy.yml',
                         inventory: '/var/lib/jenkins/workspace/pipeline/inventory.ini',
-                        extras: "-e DOCKER_USERNAME=${DOCKER_USERNAME} -e DOCKER_PASSWORD=${DOCKER_PASSWORD}"
-                    )
+                        extras: '-e DOCKER_USERNAME=${DOCKER_USERNAME} -e DOCKER_PASSWORD=${DOCKER_PASSWORD}'
+                        )
+                    }
                 }
             }
         }
