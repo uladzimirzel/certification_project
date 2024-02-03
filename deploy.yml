@@ -62,16 +62,16 @@
         state: present
 
     - name: Log in to Docker Hub
-      command: /usr/bin/docker login -u "{{ docker-username }}" -p "{{ docker-password }}"
+      command: /usr/bin/docker login -u "{{ DOCKER_USERNAME }}" -p "{{ DOCKER_PASSWORD }}"
       become: yes
       become_user: root
 
     - name: docker tag
-      command: /usr/bin/docker tag boxfuse:1.0.0 {{ docker-username }}/boxfuse:1.0.0
+      command: /usr/bin/docker tag boxfuse:1.0.0 {{ DOCKER_USERNAME }}/boxfuse:1.0.0
       become: yes
       become_user: root
 
     - name: Docker push
-      command: /usr/bin/docker push {{ docker-username }}/boxfuse:1.0.0
+      command: /usr/bin/docker push {{ DOCKER_USERNAME }}/boxfuse:1.0.0
       become: yes
       become_user: root
