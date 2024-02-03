@@ -5,7 +5,7 @@
   tasks:
     
     - name: Log in to Docker Hub
-      docker_login:
+      community.docker.docker_login:
         username: "{{ docker-username }}"
         password: "{{ docker-password }}"
     
