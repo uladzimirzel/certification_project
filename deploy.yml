@@ -62,7 +62,9 @@
         state: present
 
     - name: Log in to Docker Hub
-      command: sudo docker login -u "{{ docker-username }}" -p "{{ docker-password }}"
+      command: docker login -u "{{ docker-username }}" -p "{{ docker-password }}"
+      become: yes
+      become_user: root
 
     - name: docker tag
       command: docker tag boxfuse:1.0.0 {{ docker-username }}/boxfuse:1.0.0
