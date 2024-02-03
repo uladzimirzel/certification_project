@@ -60,18 +60,18 @@
         name: boxfuse:1.0.0
         path: /usr/app
         state: present
-
+        
     - name: Log in to Docker Hub
-      command: docker login -u "{{ docker-username }}" -p "{{ docker-password }}"
+      command: /usr/bin/docker login -u "{{ docker-username }}" -p "{{ docker-password }}"
       become: yes
       become_user: root
 
     - name: docker tag
-      command: docker tag boxfuse:1.0.0 {{ docker-username }}/boxfuse:1.0.0
+      command: /usr/bin/docker tag boxfuse:1.0.0 {{ docker-username }}/boxfuse:1.0.0
       become: yes
       become_user: root
 
     - name: Docker push
-      command: docker push {{ docker-username }}/boxfuse:1.0.0
+      command: /usr/bin/docker push {{ docker-username }}/boxfuse:1.0.0
       become: yes
       become_user: root
