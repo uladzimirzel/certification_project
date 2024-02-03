@@ -1,8 +1,8 @@
 pipeline {
     agent any
     environment {
-        DOCKER_USERNAME = "${credentials('docker-token').Username}"
-        DOCKER_PASSWORD = "${credentials('docker-token').Password}"
+        DOCKER_USERNAME = "${credentials(docker-token).username}"
+        DOCKER_PASSWORD = "${credentials(docker-token).password}"
     }
     stages {
         stage('Create instance') {
