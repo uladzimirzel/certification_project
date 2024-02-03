@@ -21,7 +21,7 @@ pipeline {
                         credentialsId: 'jenkins',
                         playbook: '/var/lib/jenkins/workspace/pipeline/deploy.yml',
                         inventory: '/var/lib/jenkins/workspace/pipeline/inventory.ini',
-                        extras: '-e docker-username=${DOCKER_USERNAME} -e docker-password=${DOCKER_PASSWORD}'
+                        extras: '-e DOCKER_USERNAME=${DOCKER_USERNAME} -e DOCKER_PASSWORD=${DOCKER_PASSWORD}'
                     )
                 }
             }
