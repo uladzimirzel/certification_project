@@ -1,11 +1,5 @@
 pipeline {
     agent any
-
-    environment {
-        DOCKER_USERNAME = credentials('docker-username')
-        DOCKER_PASSWORD = credentials('docker-password')
-    }
-
     stages {
         stage('Create instance') {
             steps {
@@ -24,7 +18,7 @@ pipeline {
                         credentialsId: 'jenkins',
                         playbook: '/var/lib/jenkins/workspace/pipeline/deploy.yml',
                         inventory: '/var/lib/jenkins/workspace/pipeline/inventory.ini',
-                        extras: "-e docker-username=${DOCKER_USERNAME} -e docker-password=${DOCKER_PASSWORD}"
+                        extras: '-e docker-username=${DOCKER_USERNAME} -e docker-password=${DOCKER_PASSWORD}'
                     )
                 }
                 }
