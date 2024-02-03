@@ -12,11 +12,10 @@ pipeline {
         }
         stage('Deploy with Ansible') {
             steps {
-                    script {
-                        credentialsId: 'jenkins',
-                        playbook: '/var/lib/jenkins/workspace/pipeline/deploy.yml',
-                        inventory: '/var/lib/jenkins/workspace/pipeline/inventory.ini'
-                    }
+                script {
+                    credentialsId: 'jenkins',
+                    playbook: '/var/lib/jenkins/workspace/pipeline/deploy.yml',
+                    inventory: '/var/lib/jenkins/workspace/pipeline/inventory.ini'
                 }
             }
         }
