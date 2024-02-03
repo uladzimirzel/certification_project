@@ -51,9 +51,9 @@ resource "null_resource" "build_instance" {
 
 provisioner "remote-exec" {
     inline = [
-      "sudo apt-get update",
-      "sudo apt-get install docker.io -y",
-      "sudo apt-get install python3-docker -y"
+      "apt-get update",
+      "apt-get install docker.io -y",
+      "apt-get install python3-docker -y"
     ]
 
     connection {
@@ -103,8 +103,8 @@ resource "null_resource" "stage_instance" {
 
     provisioner "remote-exec" {
     inline = [
-      "sudo apt-get update",
-      "sudo apt-get docker.io -y"
+      "apt-get update",
+      "apt-get install docker.io -y"
     ]
 
     connection {
