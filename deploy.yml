@@ -3,10 +3,7 @@
   hosts: build
   become: yes
   tasks:
-    
-    - name: Log in to Docker Hub
-      command: docker login -u "{{ docker-username }}" -p "{{ docker-password }}"
-      
+  
     - name: Create project directory
       file:
         path: /usr/app
