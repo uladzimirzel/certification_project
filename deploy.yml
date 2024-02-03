@@ -45,9 +45,6 @@
         name: docker
         state: started
 
-    - name: Log in to Docker Hub
-      command: sudo docker login -u "{{ docker-username }}" -p "{{ docker-password }}"
-
     - name: Create project directory
       file:
         path: /usr/app
@@ -63,6 +60,9 @@
         name: boxfuse:1.0.0
         path: /usr/app
         state: present
+
+    - name: Log in to Docker Hub
+      command: sudo docker login -u "{{ docker-username }}" -p "{{ docker-password }}"
 
     - name: Tag Docker image
       docker_image:
