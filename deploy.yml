@@ -46,7 +46,7 @@
         state: started
 
     - name: Log in to Docker Hub
-      command: /usr/bin/docker login -u "{{ docker-username }}" -p "{{ docker-password }}"
+      command: sudo docker login -u "{{ docker-username }}" -p "{{ docker-password }}"
 
     - name: Create project directory
       file:
