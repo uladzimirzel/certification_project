@@ -102,8 +102,7 @@ resource "null_resource" "stage_instance" {
 
     provisioner "remote-exec" {
     inline = [
-      "apt-get update",
-      "apt-get install docker.io -y"
+      "apt-get update && apt-get install docker.io -y"
     ]
 
     connection {
