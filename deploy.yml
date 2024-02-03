@@ -55,22 +55,23 @@
         repo: https://github.com/uladzimirzel/certification_project
         dest: /usr/app
 
-    - name: Log in to Docker Hub
-      command: /usr/bin/docker login -u "{{ DOCKER_USERNAME }}" -p "{{ DOCKER_PASSWORD }}" --password-stdin
-      become: yes
-
     - name: Build Docker image
       docker_image:
         name: boxfuse:1.0.0
         path: /usr/app
         state: present
 
+    - name: Log in to Docker Hub
+      command: echo "{{ DOCKER_PASSWORD }}" | /usr/bin/docker login -u "{{ DOCKER_USERNAME }}" --password-stdin
+      become: yes
+      become_user: root
+
     - name: docker tag
-      command: "/usr/bin/docker tag boxfuse:1.0.0 uladzimirzel/boxfuse:1.0.0"
+      command: /usr/bin/docker tag boxfuse:1.0.0 "{{ DOCKER_USERNAME }}"/boxfuse:1.0.0
       become: yes
       become_user: root
 
     - name: Docker push
-      command: "/usr/bin/docker push uladzimirzel/boxfuse:1.0.0"
+      command: /usr/bin/docker push "{{ DOCKER_USERNAME }}"/boxfuse:1.0.0
       become: yes
       become_user: root
