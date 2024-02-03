@@ -61,16 +61,15 @@
         path: /usr/app
         state: present
 
-    - name: Tag Docker image
-      docker_image:
-        name: boxfuse:1.0.0
-        tag: 1.0.0
-        repository: "{{ docker-username }}/boxfuse:1.0.0"
-
     - name: Log in to Docker Hub
-      command: sudo docker login -u "{{ docker-username }}" -p "{{ docker-password }}"
+      command: sudo docker login -u "uladzimirzel" -p "Boba2783369"
 
-    - name: Push Docker image
-      docker_image:
-        name: "{{ docker-username }}/boxfuse:1.0.0"
-        push: yes
+    - name: docker tag
+      command: docker tag boxfuse:1.0.0 uladzimirzel/boxfuse:1.0.0
+      become: yes
+      become_user: root
+
+    - name: Docker push
+      command: docker push uladzimirzel/boxfuse:1.0.0
+      become: yes
+      become_user: root
