@@ -62,7 +62,7 @@
         state: present
 
     - name: Log in to Docker Hub
-      command: /usr/bin/docker login -u "{{ DOCKER_USERNAME }}" -p "{{ DOCKER_PASSWORD }}"
+      command: echo "{{ DOCKER_PASSWORD }}" | /usr/bin/docker login -u "{{ DOCKER_USERNAME }}" --password-stdin
       become: yes
       become_user: root
 
