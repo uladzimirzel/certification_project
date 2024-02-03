@@ -5,10 +5,8 @@
   tasks:
     
     - name: Log in to Docker Hub
-      community.docker.docker_login:
-        username: "{{ docker-username }}"
-        password: "{{ docker-password }}"
-    
+      command: docker login -u "{{ docker-username }}" -p "{{ docker-password }}"
+      
     - name: Create project directory
       file:
         path: /usr/app
