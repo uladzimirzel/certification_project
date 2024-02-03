@@ -16,6 +16,7 @@
           - curl
           - gnupg-agent
           - software-properties-common
+          - python3-pip
         state: present
 
     - name: Add Docker GPG key
@@ -30,8 +31,14 @@
 
     - name: Install Docker
       apt:
-        name: docker-ce docker-ce-cli containerd.io
+        name: docker.io
         state: present
+
+    - name: Install python3-docker library
+      pip:
+        name: docker
+        state: present
+        executable: pip3
 
     - name: Start Docker service
       service:
