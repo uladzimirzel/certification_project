@@ -61,10 +61,10 @@
         path: /usr/app
         state: present
 
-    - name: Log in to Docker Hub
-      command: echo "{{ docker_password }}" | /usr/bin/docker login -u "{{ docker_username }}" --password-stdin
-      become: yes
-      become_user: root
+    - name: Log into DockerHub
+      docker_login:
+        username: "{{ docker_username }}"
+        password: "{{ docker_password }}"
 
     - name: docker tag
       command: /usr/bin/docker tag boxfuse:1.0.0 uladzimirzel/boxfuse:1.0.0
