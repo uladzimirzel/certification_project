@@ -75,3 +75,64 @@
       command: /usr/bin/docker push uladzimirzel/boxfuse:1.0.0
       become: yes
       become_user: root
+
+- name: Deploy application in Docker container
+  hosts: stage
+  become: yes
+  tasks:
+
+      - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install prerequisite packages
+      apt:
+        name: 
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - gnupg-agent
+          - software-properties-common
+          - python3-pip
+        state: present
+
+    - name: Add Docker GPG key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Add Docker APT repository
+      apt_repository:
+        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable
+        state: present
+
+    - name: Install Docker
+      apt:
+        name: docker.io
+        state: present
+
+    - name: Install python3-docker library
+      pip:
+        name: docker
+        state: present
+        executable: pip3
+
+    - name: Start Docker service
+      service:
+        name: docker
+        state: started
+
+    - name: Log into DockerHub
+      docker_login:
+        username: "{{ docker_username }}"
+        password: "{{ docker_password }}"
+
+    - name: docker pull
+      command: /usr/bin/docker pull uladzimirzel/boxfuse:1.0.0
+      become: yes
+      become_user: root
+
+    - name: run containe
+      command: /usr/bin/docker run -d -p 8080:8080 uladzimirzel/boxfuse:1.0.0
+      become: yes
+      become_user: root
